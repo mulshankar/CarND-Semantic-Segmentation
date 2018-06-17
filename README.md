@@ -1,4 +1,4 @@
-# CarND-Semantic Segmentation Project
+# CarND-Semantic Segmentation Project - Advanced Deep Learning
 Self-Driving Car Engineer Nanodegree Program
 
 ---
@@ -15,7 +15,7 @@ Self-Driving Car Engineer Nanodegree Program
 
 ## Introduction
 
-This project was designed in collaboration with the NVIDIA Deep Learning Institute for the Udacity Self-Driving Car Nanodegree program. Traditional computer vision techniques like bounding box networks - YOLO and Single Shot Detectors are helpful from a classification perspective. Semantic segmentation goes beyond these traditional techniques and identifies information at pixel-level granularity. This significantly improves decision-making ability. Shown below is a sample image from NVIDIA of a semantic segmentation implementation for scene understanding. As seen, every pixel is classified into its corresponding class - road, pedestrian, cars, train etc... 
+Traditional computer vision techniques like bounding box networks - YOLO and Single Shot Detectors are helpful from a classification perspective. Semantic segmentation goes beyond these traditional techniques and identifies information at pixel-level granularity. This significantly improves decision-making ability. Shown below is a sample image from NVIDIA of a semantic segmentation implementation for scene understanding. As seen, every pixel is classified into its corresponding class - road, pedestrian, cars, train etc... 
 
 ![alt text][image1]
 
