@@ -175,7 +175,6 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
 tests.test_train_nn(train_nn)
 
 
-
 # In[ ]:
 
 
@@ -195,7 +194,7 @@ def run():
         # Create function to get batches
         get_batches_fn = helper.gen_batch_function(os.path.join(data_dir, 'data_road/training'), image_shape)
 
-        epochs = 40
+        epochs = 30
         batch_size = 16
 
         # TF placeholders
@@ -228,16 +227,8 @@ def run():
         # TODO: Save inference data using helper.save_inference_samples
         helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
         
-        print('All done!')
-
+        print('All done!')       
         
-
 if __name__ == '__main__':
     run()
-
-
-# In[ ]:
-
-
-run()
 
