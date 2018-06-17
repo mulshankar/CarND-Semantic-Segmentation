@@ -73,9 +73,9 @@ def load_vgg(sess, vgg_path):
     return vgg_input_tensor, vgg_keep_prob_tensor, vgg_layer3_out_tensor, vgg_layer4_out_tensor, vgg_layer7_out_tensor
 
 ```
-* A quick sanity check on layer size could be performed by tf.shape() function. Layer 3 has depth of 256, layer 4 with depth of 512 and layer 7 is the fully connected layer of 4096 nodes. Width and height is assigned based on image input size.
+* A quick sanity check on layer size could be performed by tf.shape() function. Layer 3 has depth of 256, layer 4 with depth of 512 and layer 7 is the fully connected layer of 4096 nodes. Width and height is assigned based on image input size. This completes the encoder part of the FCN-8 architecture.
 
-* The fully connected layer 7 to a 1x1 convolution. This completes the encoder part of the FCN-8 architecture.
+* The fully connected layer 7 is converted to a convolutional layer by using a 1x1 convolution. 
 
 ```
 	# 1x1 convolution of vgg layer 7
@@ -87,6 +87,8 @@ def load_vgg(sess, vgg_path):
 
 * The decoder part upsamples the previous layer by a factor of 2. This is done to match dimensions with layer 4 of the VGG network. 
 
+* The upsampling is done by using the conv2d_transpose function in tensor flow with kernel size of 4 and stride size of 2.
+
 ```
 	layer4a_in1 = tf.layers.conv2d_transpose(layer7a_out, num_classes, 4, 
                                              strides= (2, 2), 
@@ -95,7 +97,7 @@ def load_vgg(sess, vgg_path):
                                              kernel_regularizer= tf.contrib.layers.l2_regularizer(1e-3))
 ```
 
-* With dimensions matched to layer 4, a skip connection is perfomed by a 1x1 convolution of layer 4 and a simple add operation.
+* With dimensions matched to layer 4, a skip connection is perfomed by a 1x1 convolution of layer 4 followed by a simple add operation.
 
 ```
     # 1x1 convolution of vgg layer 4
@@ -109,7 +111,7 @@ def load_vgg(sess, vgg_path):
 ```
 
 
-* Further upsampling and skip connections are added to match the output image size to input image size
+* Further upsampling and skip connections are added to match the output image size to input image size. The full code is available in the main.ipynb jupyter notebook. 
 
 * The network was trained using the below parameters. All training was done on the AWS cloud with GPU instance. 
 
