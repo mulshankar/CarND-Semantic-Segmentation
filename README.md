@@ -5,9 +5,9 @@ Self-Driving Car Engineer Nanodegree Program
 
 [//]: # (Image References)
 [image1]: ./Images/SceneUnderstandingSample.png
-[image2]: ./Images/TrackOverview.PNG
-[image3]: ./Images/FrenetLaneChange.png
-[image4]: ./Images/FinerPoints.png
+[image2]: ./Images/WhyFCNs.png
+[image3]: ./Images/FCN.png
+[image4]: ./Images/Skip.png
 [image5]: ./Images/Capture2.PNG
 [image6]: ./Images/Capture.PNG
 [image7]: ./Images/NIS.PNG
@@ -15,31 +15,33 @@ Self-Driving Car Engineer Nanodegree Program
 
 ## Introduction
 
-This project was designed in collaboration with the NVIDIA Deep Learning Institute for the Udacity Self-Driving Car Nanodegree program. Traditional computer vision techniques like bounding box networks - YOLO and Single Shot Detectors are helpful from a classification perspective. 
-
-Semantic segmentation goes beyond these traditional techniques and identifies information at pixel-level granularity. This significantly improves decision-making ability. Shown below is a sample image from NVIDIA of a semantic segmentation implementation for scene understanding. 
+This project was designed in collaboration with the NVIDIA Deep Learning Institute for the Udacity Self-Driving Car Nanodegree program. Traditional computer vision techniques like bounding box networks - YOLO and Single Shot Detectors are helpful from a classification perspective. Semantic segmentation goes beyond these traditional techniques and identifies information at pixel-level granularity. This significantly improves decision-making ability. Shown below is a sample image from NVIDIA of a semantic segmentation implementation for scene understanding. As seen, every pixel is classified into its corresponding class - road, pedestrian, cars, train etc... 
 
 ![alt text][image1]
 
 ## Project Objectives
 
-Implement a path planning algorithm to enable a self driving car to navigate around a track provided by the Udacity simulator and safely perform lane changes.
+The primary objective of this project is to build and train a fully convolutional network that performs semantic segmentation for a self driving car application. The goal is to identify road pixels in a given image. 
 
-## Trajectory Generation Overview
+## Fully Convolutional Networks (FCNs)
 
-The overall control architecture of a self-driving car is shown below. The key 4 elements - Perception, Localization, Control and Path-Planning. Individual modules of the behavior planner are highlighted within the blue box along with information flow. The focus of this project is on planning a trajectory for the car to traverse that is ideal in terms of speed, acceleration and jerk. The trajectory planner takes information from the localization module, prediction module and behavior planner modules and transfers its output to the motion control module. 
-
-## Test Track
-
-The simulator track is 6945.554 meters around (about 4.32 miles). If the car averages near 50 MPH, then it should take a little more than 5 minutes for it to go all the way around the highway. The highway has 6 lanes total - 3 heading in each direction. Each lane is 4 m wide and the car should only ever be in one of the 3 lanes on the right-hand side. The car should always be inside a lane unless doing a lane change. 
+Conventional deep neural networks consists of a sequence of convolutional layers followed by fully connected layers. This works great for classification type problems - for example, is this an image of a hot dog or not? 
 
 ![alt text][image2]
+
+If the question is posed slightly different - where in the picture is the hot dog? This is a much more challenging problem that requires spatial information. This is where fully convolutional networks excel. They preserve spatial information and works with input images of varying sizes. FCNs have two primary pieces - encoder and decoder. The encoder part goes through feature extraction via convolutional layers. The decoder part upscales the output of the convolutional layers to match the input image size. This is achieved via de-convolution. 
+
+![alt text][image3]
+
+In addition to just convolution and de-convolution, skip connections are also used. Skip connections help upscaling by introducing information from the original input image. Below is a sample of detecting bikers with and without skip connections. 
+
+![alt text][image4]
 
 ## Algorithm Overview
 
 Before diving into the algorithm, it is important to introduce the concept of Frenet coordinates - s and d. Frenet coordinates simplify the car position from cartesian (x,y) coordinates to road coordinates. The 's' value is the distance along the direction of the road. The first waypoint has an s value of 0 because it is the starting point. The d vector has a magnitude of 1 and points perpendicular to the road in the direction of the right-hand side of the road. The d vector can be used to calculate lane positions. Frenet coordinates along with time can accurately capture the desired safe trajectory for the vehicle to navigate. 
 
-![alt text][image3]
+
 
 While frenet coordinates are good for trajectory planning, the localization as well as motion control modules are in the global X,Y coordinates. Therefore, once the trajectory is planned in the frenet coordinate system, it is converted into XY coordinate system for the car's motion control module. The algorithm can be sub-sectioned into 2 parts - (1) First part decides on lane (2) Second part plans the trajectory for the desired lane
 
@@ -106,15 +108,15 @@ switch (lane) {
 
 * The desired finer x,y coordinates are then transferred to the motion control module that executes the path by controlling pedal, brake and steer. 
 
-![alt text][image4]
+![alt text][image5]
 
 ## Closure
 
 A trajectory planning algorithm was implemented on a self driving car for navigating around the Udacity provided test track. The car top speed was around 49.5 mph. The car navigated very well within the test track without going off the curbs under all circumstances. Multiple laps yielded the same result thus verifying repeatability. Shown below are results from a couple of test runs.
 
-![alt text][image5]
-
 ![alt text][image6]
+
+![alt text][image7]
 
 
 
